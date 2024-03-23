@@ -2,10 +2,21 @@
 #  + vytvoření dalších skupin a rozšíření hry o vybrání hádané skupiny jako třeba zvíčřata, ovoce/zelenina, země, atd.
 # TODO list - přidej zvuky
 # TODO list -
+# TODO list - vytvořit další soubor s listem, kde budou zvířata - více zvířat :D
+#  + vytvoření dalších skupin a rozšíření hry o vybrání hádané skupiny jako třeba zvíčřata, ovoce/zelenina, země, atd.
+# TODO list - přidej zvuky
+# TODO list -
+
+# TODO list - vytvořit další soubor s listem, kde budou zvířata - více zvířat :D
+#  + vytvoření dalších skupin a rozšíření hry o vybrání hádané skupiny jako třeba zvíčřata, ovoce/zelenina, země, atd.
+# TODO list - přidej zvuky
+# TODO list -
+
 
 import os
 
 import pygame
+
 
 # Inicializace hry
 pygame.init()
@@ -14,7 +25,7 @@ pygame.init()
 WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 600
 screen = pygame.display.set_mode((WINDOW_HEIGHT, WINDOW_WIDTH)) # tohle je vloženo jako tuple
-pygame.display.set_caption("Hangman with animals")
+pygame.display.set_caption("Hangman")
 
 # Barvy
 WHITE = (255, 255, 255)
@@ -90,6 +101,23 @@ while running: # všecchny kliknutí se nazývají event (klik nahoru, dolu, poh
         screen.blit(text3,(category_rect3.x + 10,category_rect3.y + 15))
 
 
+    #pygame.display.update()
+
+    # TODO ohle by mělo udělat to, že po kliknutí na na jednotlivé obdelníčky by mě to mělo přepnout na list main_game a
+    # TODO tam jet podle kod podle vytvořených tříd
+        mouse_pos = pygame.mouse.get_pos()
+        if category_rect1.collidepoint(mouse_pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                from _4_animals import Animals
+        elif category_rect2.collidepoint(mouse_pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                from _5_fruits_vegetable import Fruit_vegetable
+
+        elif category_rect3.collidepoint(mouse_pos):
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                from _6_europeans_states import European_states
+
+    # obnovení hry
     pygame.display.update()
 
 # Ukončení
