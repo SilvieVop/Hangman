@@ -77,19 +77,21 @@ class Animals:
 
         pygame.display.flip()
 
-    def game_over_screen(self):
+    def game_over_screen(self): # tohle by mi mělo zajistit při přohře zobrazit game_over a pustit def. pro opakovane spuštění či zrušení
         script_dir = os.path.dirname(__file__)
-        image_folder = os.path.join(script_dir, "pictures")
-        game_over_image = pygame.image.load(os.path.join(image_folder, "game_over.png"))
-        self.screen.blit(game_over_image, (0, 0))
+        image_folder = os.path.join(script_dir,"pictures")
+        game_over_image = pygame.image.load(os.path.join(image_folder,"game_over.png"))
+        self.screen.blit(game_over_image,(0,0))
         pygame.display.flip()
+        self.handle_game_end()
 
-    def win_screen(self):
+    def win_screen(self): # to same jako vyše ale pří výhře
         script_dir = os.path.dirname(__file__)
-        image_folder = os.path.join(script_dir, "pictures")
-        win_image = pygame.image.load(os.path.join(image_folder, "win.png"))
-        self.screen.blit(win_image, (0, 0))
+        image_folder = os.path.join(script_dir,"pictures")
+        win_image = pygame.image.load(os.path.join(image_folder,"win.png"))
+        self.screen.blit(win_image,(0,0))
         pygame.display.flip()
+        self.handle_game_end()
 
     def run(self):
         running = True
@@ -100,7 +102,7 @@ class Animals:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # Kontrola levého tlačítka myši
                         x,y = event.pos
-                        if 600 <= x <= 630:  # Pokud je kliknuto v prvním sloupci abecedy
+                        if 600 <= x <= 630:  # klikání na první sloupec abecedy
                             column = (y - 50) // 30
                             clicked_letter = chr(65 + column)
                             if clicked_letter not in self.guessed_letters:
@@ -146,15 +148,29 @@ class Animals:
                     self.handle_game_end()
             else:
                 print("Correct guess!")
+                if all(letter in self.guessed_letters for letter in self.word):
+                    self.win_screen()
+                    self.handle_game_end()
+
+    def reset_game(self):
+        self.word = random.choice(categories["Animals"]).upper()
+        self.guessed_letters = set()
+        self.lives = 6
+        self.hidden_word = "_" * len(self.word)
+        self.current_hangman_index = 0
 
     def handle_game_end(self):
-        answer = ""
-        while answer.lower() not in ['y','n']:
-            answer = input("Do you wanna play once more? (y/n): ")
-        if answer.lower() == 'y':
-            self.__init__()  # Restartování hry
-        elif answer.lower() == 'n':
-            pygame.quit()
+        waiting_for_input = True
+        while waiting_for_input:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_y:
+                        self.reset_game()  # reset hry
+                        waiting_for_input = False
+                    elif event.key == pygame.K_n:
+                        pygame.quit()
+                        waiting_for_input = False
+
 
 if __name__ == "__main__":
     game = Animals()
